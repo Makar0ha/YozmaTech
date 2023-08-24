@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  api-server:
+    container_name: api-server
+    build: .
+    ports:
+     - "3003:3003"
+    depends_on:
+      - dynamodb-local
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET}
+      REGION: ${REGION}
+      ENDPOINT: ${ENDPOINT}
+
+  dynamodb-local:
+      container_name: dynamodb-local
+      image: "amazon/dynamodb-local:latest"
+      ports:
+          - "8000:8000"
+      volumes:
+          - "./docker/dynamodb:/home/dynamodblocal/data"
+      working_dir: /home/dynamodblocal
+      environment:
+        AWS_ACCESS_KEY_ID: ${AWS_KEY}
+        AWS_SECRET_ACCESS_KEY: ${AWS_SECRET}
+        REGION: ${REGION}
+        ENDPOINT: ${ENDPOINT}
